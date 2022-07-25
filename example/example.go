@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	// define handler. we can put API call inside this function
 	handler := func(ctx context.Context, inputs []interface{}) (outputs []interface{}) {
 		nums := make([]int, len(inputs))
 
@@ -26,7 +27,9 @@ func main() {
 		return
 	}
 
+	// initiate mnc
 	m, _ := mnc.Init(handler, mnc.WithBatch(3))
+	// run mnc in a separate goroutine
 	go m.Run()
 
 	wg := sync.WaitGroup{}
@@ -35,6 +38,7 @@ func main() {
 		fmt.Println("try on", i)
 		wg.Add(1)
 
+		// pass i into mnc one by one
 		go func(i int) {
 			defer wg.Done()
 
